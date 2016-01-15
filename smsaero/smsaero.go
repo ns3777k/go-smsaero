@@ -1,42 +1,48 @@
 package smsaero
 
 import (
-	"net/http"
-	"strings"
-	"net/url"
 	"encoding/json"
-	"errors"
 	"fmt"
+	"net/http"
+	"net/url"
+	"strings"
 )
 
 const (
 	baseURL = "https://gate.smsaero.ru"
 )
 
+// ErrorResponse описывает поля при ответе с ошибкой
 type ErrorResponse struct {
 	Result string `json:"result,omitempty"`
 	Reason string `json:"reason,omitempty"`
 }
 
+// IsErrorResponse проверяет ответ на наличие ошибок
 func (e ErrorResponse) IsErrorResponse() bool {
 	return (len(e.Result) > 0 && e.Result == "reject") || len(e.Reason) > 0
 }
 
+// GetError возвращает строковое представление ошибки в ответе
 func (e ErrorResponse) GetError() error {
-	return errors.New(fmt.Sprintf("Result: %s. Reason: %s", e.Result, e.Reason))
+	return fmt.Errorf("Result: %s. Reason: %s", e.Result, e.Reason)
 }
 
+// ErrorableResponse определяет интерфейс ответа, который может содержать ошибку
 type ErrorableResponse interface {
 	IsErrorResponse() bool
 	GetError() error
 }
 
+// Client определяем структуру клиента
 type Client struct {
 	username string
 	password string
 	client   *http.Client
 }
 
+// executeRequest отсылает POST-запрос сервису и декодирует JSON-ответ в
+// структуру реализующую ErrorableResponse
 func (c *Client) executeRequest(path string, destination ErrorableResponse, params url.Values) error {
 	fullURL := baseURL + path
 
@@ -62,6 +68,7 @@ func (c *Client) executeRequest(path string, destination ErrorableResponse, para
 	return nil
 }
 
+// NewClient создает новый клиент и возвращает его
 func NewClient(httpClient *http.Client, username, password string) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient

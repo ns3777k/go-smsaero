@@ -6,21 +6,24 @@ import (
 )
 
 const (
-	sendPath = "/send/"
+	sendPath   = "/send/"
 	statusPath = "/status/"
 )
 
+// SendReport описывает ответ API по отправке SMS
 type SendReport struct {
 	ID int `json:"id,omitempty"`
 	ErrorResponse
 }
 
+// StatusReport описывает ответ API по запросу статуса отправки
 type StatusReport struct {
 	ID int `json:"id,omitempty"`
 	ErrorResponse
 }
 
-// TODO: add optional date & digital params
+// Send отправляет SMS
+// TODO: добавить опциональные параметры - дата отправки и цифровой канал
 func (c *Client) Send(to int, text string, from string) (int, error) {
 	sendReportResponse := new(SendReport)
 	params := make(url.Values, 0)
@@ -39,6 +42,7 @@ func (c *Client) Send(to int, text string, from string) (int, error) {
 	return sendReportResponse.ID, nil
 }
 
+// GetStatus запрашивает статус отправки SMS
 func (c *Client) GetStatus(smsID int) (string, error) {
 	statusReportResponse := new(StatusReport)
 	params := make(url.Values, 0)
