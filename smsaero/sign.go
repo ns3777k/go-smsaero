@@ -24,7 +24,7 @@ type SignStatus struct {
 }
 
 // UnmarshalJSON является необходимым для реализации интерфейса Unmarshaler,
-// поскольку JSON-ответ может быть либо массив либо объект необходимо
+// поскольку JSON-ответ может быть либо массив либо объект
 func (s *SignsList) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &s.Senders); err == nil {
 		return nil
