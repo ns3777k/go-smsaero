@@ -10,6 +10,7 @@ import (
 
 const (
 	baseURL = "https://gate.smsaero.ru"
+	responseType = "json"
 )
 
 // ErrorResponse описывает поля при ответе с ошибкой
@@ -39,12 +40,13 @@ type Client struct {
 	username string
 	password string
 	client   *http.Client
+	BaseURL string
 }
 
 // executeRequest отсылает POST-запрос сервису и декодирует JSON-ответ в
 // структуру реализующую ErrorableResponse
 func (c *Client) executeRequest(path string, destination ErrorableResponse, params url.Values) error {
-	fullURL := baseURL + path
+	fullURL := c.BaseURL + path
 
 	if params == nil {
 		params = make(url.Values, 0)
@@ -52,7 +54,7 @@ func (c *Client) executeRequest(path string, destination ErrorableResponse, para
 
 	params.Add("user", c.username)
 	params.Add("password", c.password)
-	params.Add("answer", "json")
+	params.Add("answer", responseType)
 
 	resp, err := c.client.Post(fullURL, "application/x-www-form-urlencoded", strings.NewReader(params.Encode()))
 	if err != nil {
@@ -78,5 +80,6 @@ func NewClient(httpClient *http.Client, username, password string) *Client {
 		username: username,
 		password: password,
 		client:   httpClient,
+		BaseURL:  baseURL,
 	}
 }
