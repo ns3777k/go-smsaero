@@ -1,5 +1,8 @@
 # go-smsaero
 
+[![Coverage Status](https://coveralls.io/repos/github/ns3777k/go-smsaero/badge.svg?branch=master)](https://coveralls.io/github/ns3777k/go-smsaero?branch=master)
+[![Build Status](https://travis-ci.org/ns3777k/go-smsaero.svg?branch=master)](https://travis-ci.org/ns3777k/go-smsaero)
+
 API-клиент для [SMS Aero](http://smsaero.ru/).
 
 Отличительные особенности сервиса и API:
