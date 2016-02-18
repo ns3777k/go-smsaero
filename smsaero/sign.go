@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	singsListPath = "/senders/"
+	signsListPath = "/senders/"
 	signAddPath   = "/sign/"
 )
 
@@ -41,7 +41,7 @@ func (s *SignsList) UnmarshalJSON(b []byte) error {
 func (c *Client) GetSigns() ([]string, error) {
 	signListResponse := new(SignsList)
 
-	if err := c.executeRequest(singsListPath, signListResponse, nil); err != nil {
+	if err := c.executeRequest(signsListPath, signListResponse, nil); err != nil {
 		return signListResponse.Senders, err
 	}
 
